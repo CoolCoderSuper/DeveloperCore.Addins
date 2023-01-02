@@ -1,16 +1,17 @@
+Imports System.Reflection
 Imports DeveloperCore.Addins
 
 Friend Module Program
 
     Public Sub Main()
-        Dim objApp As New App With {.Services = New List(Of AppService) From {New AppService With {.Name = "MessageSender", .[Interface] = GetType(IMessageSender)}, New AppService With {.Name = "OtherMessageSender", .[Interface] = GetType(MessageSender)}}}
-        Dim objAddin As Addin = Loader.Load(IO.File.ReadAllText("Addin.json"), objApp)
+        Dim objAddin As Addin = Loader.Load(IO.File.ReadAllText("Addin.json"), Assembly.GetEntryAssembly)
         objAddin.GetService(Of IMessageSender).Send("Hi")
-        objAddin.GetService(Of MessageSender).Send("Bye ")
+        objAddin.GetService(Of MessageSender).Send("Bye")
     End Sub
 
 End Module
 
+<Service("MessageSender")>
 Public Interface IMessageSender
     Property LastMessage As String
 
@@ -18,7 +19,10 @@ Public Interface IMessageSender
 
 End Interface
 
+<Service("OtherMessageSender")>
 Public MustInherit Class MessageSender
+
+    Public MustOverride Sub Init
 
     Public Overridable Sub Send(m As String)
         Console.WriteLine(m)

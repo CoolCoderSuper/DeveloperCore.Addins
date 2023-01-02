@@ -8,12 +8,13 @@ Public Class Addin
     Public Property Author As String
     Public Property Assembly As String
     Public Property Services As List(Of Service)
-    Public Property App As App
+    Friend Property HostServices As Dictionary(Of String, Type)
 
+    'TODO: Better exceptions
+    'TODO: Think of validation
     Public Function GetService(Of T)() As T
-        Dim objAppServ As AppService = App.Services.FirstOrDefault(Function(x) x.Interface Is GetType(T))
-        If objAppServ Is Nothing Then throw New Exception("Invalid service")
-        Dim serv As Service = Services.FirstOrDefault(Function(x) x.Service = objAppServ.Name)
+        Dim servName As String = HostServices.FirstOrDefault(Function(x) x.Value Is GetType(T)).Key
+        Dim serv As Service = Services.FirstOrDefault(Function(x) x.Service = servName)
         If Not Services.Contains(serv) Then Throw New Exception("Invalid service")
         If Not _dctServices.ContainsKey(serv) Then
             Dim objAssembly As Assembly = Reflection.Assembly.LoadFrom(Assembly)
