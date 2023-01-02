@@ -7,16 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Addin.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Addin.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DeveloperCore.Addins\DeveloperCore.Addins.vbproj" />
   </ItemGroup>
 

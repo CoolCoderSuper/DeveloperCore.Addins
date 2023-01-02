@@ -4,7 +4,7 @@ Imports DeveloperCore.Addins
 Friend Module Program
 
     Public Sub Main()
-        Dim objAddin As Addin = Loader.Load(IO.File.ReadAllText("Addin.json"), Assembly.GetEntryAssembly)
+        Dim objAddin As New Addin("C:\CodingCool\Code\Projects\DeveloperCore.Addins\Addin1\bin\Debug\net7.0\Addin1.dll", Assembly.GetEntryAssembly)
         objAddin.GetService(Of IMessageSender).Send("Hi")
         objAddin.GetService(Of MessageSender).Send("Bye")
     End Sub
