@@ -6,12 +6,13 @@ Friend Module Program
     Public Sub Main()
         Dim objAddin As New Addin("C:\CodingCool\Code\Projects\DeveloperCore.Addins\Addin1\bin\Debug\net7.0\Addin1.dll", Assembly.GetEntryAssembly)
         objAddin.GetService(Of IMessageSender).Send("Hi")
+        objAddin.GetService(Of MessageSender).Init
         objAddin.GetService(Of MessageSender).Send("Bye")
     End Sub
 
 End Module
 
-<Service("MessageSender")>
+<Service()>
 Public Interface IMessageSender
     Property LastMessage As String
 
@@ -19,7 +20,7 @@ Public Interface IMessageSender
 
 End Interface
 
-<Service("OtherMessageSender")>
+<Service()>
 Public MustInherit Class MessageSender
 
     Public MustOverride Sub Init

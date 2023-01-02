@@ -1,7 +1,7 @@
 Imports DeveloperCore.Addins
 Imports TestApp
 
-<ServiceImpl("MessageSender")>
+<ServiceImpl(GetType(IMessageSender))>
 Public Class ConsoleMessageSender
     Implements IMessageSender
 

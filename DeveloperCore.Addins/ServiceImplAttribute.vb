@@ -1,11 +1,10 @@
 <AttributeUsage(AttributeTargets.Class Or AttributeTargets.Interface)>
 Public Class ServiceImplAttribute
     Inherits Attribute
-    Public ReadOnly Property Name As String
+    Public ReadOnly Property ServiceType As Type
 
-    Public Sub New(name As String)
-        Me.Name = name
-
+    Public Sub New(servType As Type)
+        ServiceType = servType
     End Sub
 
 End Class

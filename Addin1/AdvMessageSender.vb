@@ -1,7 +1,7 @@
 ﻿Imports DeveloperCore.Addins
 Imports TestApp
 
-<ServiceImpl("OtherMessageSender")>
+<ServiceImpl(GetType(MessageSender))>
 Public Class AdvMessageSender
     Inherits MessageSender
 

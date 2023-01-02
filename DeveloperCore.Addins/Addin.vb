@@ -2,6 +2,7 @@ Imports System.Reflection
 
 'TODO: Dependencies
 'TODO: Isolation
+'TODO: Addin manager
 Public Class Addin
 
     Public Sub New(assembly As String, hostAsm As Assembly)
@@ -15,32 +16,30 @@ Public Class Addin
         Description = addinDescriptor.Description
         HostServices = hostAsm.GetHostServices
         Services = addinAsm.GetServices
-        For Each serv As Service In Services
-            If Not HostServices.ContainsKey(serv.Service) Then Throw New Exception($"Could not find service {serv.Service}")
-            Dim impl As Type = serv.Implementation
-            If impl Is Nothing Then Throw New Exception($"Could not find type {serv.Implementation}")
-            Dim objService As Type = HostServices(serv.Service)
-            If Not objService.IsAssignableFrom(impl) Then Throw New Exception("Invalid type")
+        For Each serv As Type In Services
+            Dim objService As Type = serv.GetCustomAttribute(Of ServiceImplAttribute).ServiceType
+            If Not HostServices.Contains(objService) Then Throw New Exception($"Could not find service {serv.Name}")
+            If Not objService.IsAssignableFrom(serv) Then Throw New Exception("Invalid type")
         Next
     End Sub
 
-    Private _dctServices As New Dictionary(Of Service, Object)
+    Private _dctServices As New Dictionary(Of Type, Object)
     Public ReadOnly Property Name As String
     Public ReadOnly Property Version As Version
     Public ReadOnly Property Description As String
     Public ReadOnly Property Author As String
     Public ReadOnly Property Assembly As String
-    Public ReadOnly Property Services As List(Of Service)
-    Friend ReadOnly Property HostServices As Dictionary(Of String, Type)
+    Public ReadOnly Property Services As List(Of Type)
+    Friend ReadOnly Property HostServices As List(Of Type)
 
     Public Function GetService(Of T)() As T
         Dim servAttr As ServiceAttribute = GetType(T).GetCustomAttribute(Of ServiceAttribute)
         If servAttr Is Nothing Then Throw New Exception("The type does not have the required 'ServiceAttribute'")
-        Dim serv As Service = Services.FirstOrDefault(Function(x) x.Service = servAttr.Name)
+        Dim serv As Type = Services.FirstOrDefault(Function(x) x.GetCustomAttribute(Of ServiceImplAttribute).ServiceType Is GetType(T))
         If Not Services.Contains(serv) Then Throw New Exception("The service was not implemented in the addin")
         If Not _dctServices.ContainsKey(serv) Then
             Dim objAssembly As Assembly = Reflection.Assembly.LoadFrom(Assembly)
-            _dctServices.Add(serv, objAssembly.CreateInstance(serv.Implementation.FullName))
+            _dctServices.Add(serv, objAssembly.CreateInstance(serv.FullName))
         End If
         Return _dctServices(serv)
     End Function
