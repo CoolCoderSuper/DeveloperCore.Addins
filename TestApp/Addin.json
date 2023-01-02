@@ -1,0 +1,18 @@
+﻿{
+	"Name": "",
+	"Version": "",
+	"Description": "",
+	"Author": "",
+	"Assembly": "C:\\CodingCool\\Code\\Projects\\DeveloperCore.Addins\\Addin1\\bin\\Debug\\net7.0\\Addin1.dll",
+	"Services":
+	[
+		{
+			"Service": "MessageSender",
+			"Implementation": "Addin1.ConsoleMessageSender"
+		},
+		{
+			"Service": "OtherMessageSender",
+			"Implementation": "Addin1.AdvMessageSender"
+		}
+	]
+}
