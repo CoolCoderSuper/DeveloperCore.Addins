@@ -1,8 +1,5 @@
 Imports System.Reflection
 
-'TODO: Dependencies
-'TODO: Isolation
-'TODO: Addin manager
 Public Class Addin
 
     Public Sub New(assembly As String, hostAsm As Assembly)
@@ -23,7 +20,7 @@ Public Class Addin
         Next
     End Sub
 
-    Private _dctServices As New Dictionary(Of Type, Object)
+    ReadOnly Private _dctServices As New Dictionary(Of Type, Object)
     Public ReadOnly Property Name As String
     Public ReadOnly Property Version As Version
     Public ReadOnly Property Description As String

@@ -10,4 +10,10 @@
     <ProjectReference Include="..\DeveloperCore.Addins\DeveloperCore.Addins.vbproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Addins.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
