@@ -5,11 +5,11 @@ Friend Module Program
 
     Public Sub Main()
         'Dim objAddin As New Addin("C:\CodingCool\Code\Projects\DeveloperCore.Addins\Addin1\bin\Debug\net7.0\Addin1.dll", Assembly.GetEntryAssembly)
-        Dim mngr As New JsonManager("Addins.json")
+        Dim mngr As New FileSystemManager("C:\CodingCool\DeveloperCore\Addins")
         mngr.Init(Reflection.Assembly.GetEntryAssembly)
         Dim objAddin As Addin = mngr.Addins.First.Addin
         objAddin.GetService(Of IMessageSender).Send("Hi")
-        objAddin.GetService(Of MessageSender).Init
+        objAddin.GetService(Of MessageSender).Init()
         objAddin.GetService(Of MessageSender).Send("Bye")
     End Sub
 
@@ -26,7 +26,7 @@ End Interface
 <Service()>
 Public MustInherit Class MessageSender
 
-    Public MustOverride Sub Init
+    Public MustOverride Sub Init()
 
     Public Overridable Sub Send(m As String)
         Console.WriteLine(m)

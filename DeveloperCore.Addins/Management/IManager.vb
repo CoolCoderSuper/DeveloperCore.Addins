@@ -1,7 +1,5 @@
 ﻿Imports System.Reflection
 
-'TODO: Share common resources across addins
-'TODO: Properly dispose stuff
 Namespace Management
 
     Public Interface IManager
