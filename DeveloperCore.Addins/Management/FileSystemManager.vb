@@ -3,6 +3,9 @@ Imports System.Reflection
 
 Namespace Management
 
+    ''' <summary>
+    ''' Implementation <see cref="IManager"/> using a directory.
+    ''' </summary>
     Public Class FileSystemManager
         Implements IManager
 

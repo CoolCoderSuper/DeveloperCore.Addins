@@ -2,6 +2,9 @@
 
 Namespace Management
 
+    ''' <summary>
+    ''' Implementation <see cref="IManager"/> using a JSON file.
+    ''' </summary>
     Public Class JsonManager
         Implements IManager
 

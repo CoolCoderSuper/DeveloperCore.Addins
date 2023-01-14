@@ -1,3 +1,6 @@
+''' <summary>
+''' Provides meta-data about the addin.
+''' </summary>
 <AttributeUsage(AttributeTargets.Assembly)>
 Public Class AddinAttribute
     Inherits Attribute
