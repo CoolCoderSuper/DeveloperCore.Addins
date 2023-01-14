@@ -4,8 +4,12 @@ Imports DeveloperCore.Addins.Management
 Friend Module Program
 
     Public Sub Main()
-        'Dim objAddin As New Addin("C:\CodingCool\Code\Projects\DeveloperCore.Addins\Addin1\bin\Debug\net7.0\Addin1.dll", Assembly.GetEntryAssembly)
-        Dim mngr As New FileSystemManager("C:\CodingCool\DeveloperCore\Addins")
+        Dim mngr As FileSystemManager
+        If Environment.OSVersion.Platform = PlatformID.Win32NT Then
+            mngr = New FileSystemManager("C:\CodingCool\DeveloperCore\Addins")
+        Else
+            mngr = New FileSystemManager("/home/canadiancoder/addins")
+        End If
         mngr.Init(Reflection.Assembly.GetEntryAssembly)
         Dim objAddin As Addin = mngr.Addins.First.Addin
         objAddin.GetService(Of IMessageSender).Send("Hi")
