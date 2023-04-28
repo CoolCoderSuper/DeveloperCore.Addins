@@ -23,13 +23,13 @@ Public Class Addin
         HostServices = hostAsm.GetHostServices
         Services = addinAsm.GetServices
         For Each serv As Type In Services
-            Dim objService As Type = serv.GetCustomAttribute(Of ServiceImplAttribute).ServiceType
-            If Not HostServices.Contains(objService) Then Throw New Exception($"Could not find service {serv.Name}")
-            If Not objService.IsAssignableFrom(serv) Then Throw New Exception("Invalid type")
+            Dim serviceImpl As Type = serv.GetCustomAttribute(Of ServiceImplAttribute).ServiceType
+            If Not HostServices.Contains(serviceImpl) Then Throw New Exception($"Could not find service {serv.Name}")
+            If Not serviceImpl.IsAssignableFrom(serv) Then Throw New Exception("Invalid type")
         Next
     End Sub
 
-    Private ReadOnly _dctServices As New Dictionary(Of Type, Object)
+    Private ReadOnly _servicesCache As New Dictionary(Of Type, Object)
 
     ''' <summary>
     ''' The name of the addin.
@@ -79,11 +79,19 @@ Public Class Addin
         If servAttr Is Nothing Then Throw New Exception("The type does not have the required 'ServiceAttribute'")
         Dim serv As Type = Services.FirstOrDefault(Function(x) x.GetCustomAttribute(Of ServiceImplAttribute).ServiceType Is GetType(T))
         If Not Services.Contains(serv) Then Throw New Exception("The service was not implemented in the addin")
-        If Not _dctServices.ContainsKey(serv) Then
-            Dim objAssembly As Assembly = Reflection.Assembly.LoadFrom(Assembly)
-            _dctServices.Add(serv, objAssembly.CreateInstance(serv.FullName))
-        End If
-        Return _dctServices(serv)
+        Dim constructs As ConstructorInfo() = serv.GetConstructors
+        If constructs.Length <> 1 Then Throw New Exception("The service must have a single constructor")
+        Dim parameters As Type() = constructs(0).GetParameters.Select(Function(x) x.ParameterType).ToArray
+        Dim args As New List(Of Object)
+        For Each param As Type In parameters
+            Dim d As AddinDependency = _dependencies.FirstOrDefault(Function(x) x.PlacementType Is param)
+            If d Is Nothing Then
+                args.Add(Nothing)
+            Else
+                args.Add(GetDependency(d))
+            End If
+        Next
+        Return Activator.CreateInstance(serv, args.ToArray)
     End Function
 
 End Class
